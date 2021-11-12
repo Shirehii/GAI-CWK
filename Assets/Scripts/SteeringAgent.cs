@@ -26,7 +26,7 @@ public class SteeringAgent : MonoBehaviour
 	/// <summary>
 	/// Stores a list of all steering behaviours that are on a SteeringAgent GameObject, regardless if they are enabled or not
 	/// </summary>
-	private List<SteeringBehaviour> steeringBehvaiours = new List<SteeringBehaviour>();
+	private List<SteeringBehaviour> steeringBehaviours = new List<SteeringBehaviour>();
 
 	/// <summary>
 	/// Called once per frame
@@ -53,8 +53,8 @@ public class SteeringAgent : MonoBehaviour
 	{
 		Vector3 steeringVelocity = Vector3.zero;
 		
-		GetComponents<SteeringBehaviour>(steeringBehvaiours);
-		foreach (SteeringBehaviour currentBehaviour in steeringBehvaiours)
+		GetComponents<SteeringBehaviour>(steeringBehaviours);
+		foreach (SteeringBehaviour currentBehaviour in steeringBehaviours)
 		{
 			if(currentBehaviour.enabled)
 			{
