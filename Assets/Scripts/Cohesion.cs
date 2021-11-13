@@ -37,6 +37,7 @@ public class Cohesion : SteeringBehaviour
         //seek steering behavior.
         attractiveForce = averagePosition - transform.position;
 
+        print(attractiveForce);
         return attractiveForce;
     }
 }
