@@ -58,6 +58,7 @@ public class SteeringAgent : MonoBehaviour
 		{
 			if(currentBehaviour.enabled)
 			{
+				//TODO: add weighting here
 				steeringVelocity += currentBehaviour.UpdateBehaviour(this);
 
 				// Show debug lines in scene view

@@ -39,6 +39,7 @@ public class Alignment : SteeringBehaviour
         //turn our character so it is aligned with its neighbors.
         alignmentForce = averageForce - transform.forward;
 
+        //TODO: this is returning zero, fix it
         return alignmentForce;
     }
 }
