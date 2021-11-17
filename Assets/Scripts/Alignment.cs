@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class Alignment : SteeringBehaviour
 {
+    [SerializeField]
+    private int detectionRadius = 500;
     public override Vector3 UpdateBehaviour(SteeringAgent steeringAgent)
     {
         // Alignment steering behavior gives an character the ability to align itself with (that is, head in
         //the same direction and/ or speed as) other nearby characters, as shown in Figure 16.Steering
         //for alignment can be computed by finding all characters in the local neighborhood(as
         //described above for separation)
-
-        int detectionRadius = 500;
         Vector3 alignmentForce = new Vector3(0, 0, 0);
 
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, detectionRadius);

@@ -21,7 +21,7 @@ public class SteeringAgent : MonoBehaviour
 	/// Returns the current velocity of the Agent
 	/// NOTE: [field: SerializeField] exposes a C# property to Unity's inspector which is useful to toggle at runtime
 	/// </summary>
-	public Vector3 CurrentVelocity	{ get; protected set; }
+	public Vector3 CurrentVelocity { get; protected set; }
 
 	/// <summary>
 	/// Stores a list of all steering behaviours that are on a SteeringAgent GameObject, regardless if they are enabled or not

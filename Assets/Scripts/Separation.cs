@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class Separation : SteeringBehaviour
 {
+    [SerializeField]
+    private int detectionRadius = 200;
+
     public override Vector3 UpdateBehaviour(SteeringAgent steeringAgent)
     {
-        int detectionRadius = 100;
         Vector3 repulsiveForce = new Vector3(0, 0, 0);
 
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, detectionRadius);
@@ -26,7 +28,7 @@ public class Separation : SteeringBehaviour
         //These repulsive forces for each nearby character are summed together to produce the overall steering force.
         for (int i = 0; i < otherAgents.Count; i++)
         {
-            repulsiveForce += Vector3.Normalize(transform.position - otherAgents[i].transform.position) * steeringAgent.MaxSpeed;
+            repulsiveForce += (Vector3.Normalize(transform.position - otherAgents[i].transform.position) * steeringAgent.MaxSpeed);
         }
         
         return repulsiveForce;
