@@ -44,6 +44,7 @@ public class Alignment : SteeringBehaviour
         //turn our character so it is aligned with its neighbors.
         alignmentForce = Vector3.Normalize(averageForce - transform.up) * steeringAgent.MaxSpeed;
 
+        //TODO: return steeringVelocity instead?
         return alignmentForce;
     }
 }

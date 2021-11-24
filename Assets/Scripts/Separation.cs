@@ -35,8 +35,10 @@ public class Separation : SteeringBehaviour
         {
             repulsiveForce += Vector3.Normalize(transform.position - otherAgents[i].transform.position);
         }
+        repulsiveForce /= otherAgents.Count; //TODO: determine if this is needed
         repulsiveForce = Vector3.Normalize(repulsiveForce) * steeringAgent.MaxSpeed;
-        
+
+        //TODO: return steeringVelocity instead?
         return repulsiveForce;
     }
 }

@@ -41,8 +41,9 @@ public class Cohesion : SteeringBehaviour
         //The steering force can applied in the direction of that “average position” (subtracting our character position
         //from the average position, as in the original boids model), or it can be used as the target for
         //seek steering behavior.
-        attractiveForce = (averagePosition - transform.position) * steeringAgent.MaxSpeed;
+        attractiveForce = Vector3.Normalize(averagePosition - transform.position) * steeringAgent.MaxSpeed;
 
+        //TODO: return steeringVelocity instead?
         return attractiveForce;
     }
 }
