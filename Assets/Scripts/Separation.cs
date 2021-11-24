@@ -12,6 +12,7 @@ public class Separation : SteeringBehaviour
     public override Vector3 UpdateBehaviour(SteeringAgent steeringAgent)
     {
         Vector3 repulsiveForce = new Vector3(0, 0, 0);
+
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, neighborhoodDistance);
 
         List<GameObject> otherAgents = new List<GameObject>(); //list of agents in the neighborhood
@@ -20,10 +21,9 @@ public class Separation : SteeringBehaviour
         for (int i = 0; i < hitColliders.Length; i++)
         {
             Vector3 otherAgentDirection = hitColliders[i].transform.position - transform.position;
-            float angle = Vector3.Angle(otherAgentDirection, transform.forward);
-            print(angle); //TODO: find out why this only returns 90
+            float angle = Vector3.Angle(otherAgentDirection, transform.up);
 
-            if (hitColliders[i].tag == "Follower" && angle <= neighborhoodAngle && -angle >= -neighborhoodAngle)
+            if (hitColliders[i].tag == "Follower" && angle <= neighborhoodAngle && -angle >= -neighborhoodAngle) //TODO: determine if -angle >= -neighborhoodAngle is needed
                 otherAgents.Add(hitColliders[i].gameObject);
         }
 
@@ -33,8 +33,9 @@ public class Separation : SteeringBehaviour
         //These repulsive forces for each nearby character are summed together to produce the overall steering force.
         for (int i = 0; i < otherAgents.Count; i++)
         {
-            repulsiveForce += (Vector3.Normalize(transform.position - otherAgents[i].transform.position) * steeringAgent.MaxSpeed);
+            repulsiveForce += Vector3.Normalize(transform.position - otherAgents[i].transform.position);
         }
+        repulsiveForce = Vector3.Normalize(repulsiveForce) * steeringAgent.MaxSpeed;
         
         return repulsiveForce;
     }
