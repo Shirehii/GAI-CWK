@@ -29,7 +29,7 @@ public class Alignment : SteeringBehaviour
         Vector3 averageForce = new Vector3(0, 0, 0);
         for (int i = 0; i < otherAgents.Count; i++)
         {
-            averageForce += otherAgents[i].transform.forward;
+            averageForce += otherAgents[i].GetComponent<SteeringAgent>().CurrentVelocity;
         }
         averageForce = averageForce / otherAgents.Count;
 
@@ -37,9 +37,8 @@ public class Alignment : SteeringBehaviour
         //This average is the “desired velocity,” and so the steering vector is the difference between the average
         //and our character’s current velocity(or alternately, its unit forward vector).This steering will tend to
         //turn our character so it is aligned with its neighbors.
-        alignmentForce = averageForce - transform.forward;
+        alignmentForce = Vector3.Normalize(averageForce - GetComponent<SteeringAgent>().CurrentVelocity);
 
-        //TODO: this is returning zero, fix it
         return alignmentForce;
     }
 }
