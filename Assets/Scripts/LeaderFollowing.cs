@@ -18,7 +18,7 @@ public class LeaderFollowing : SteeringBehaviour
     [SerializeField]
     private float offset = 100;
 
-    public override Vector3 UpdateBehaviour(SteeringAgent steeringAgent)
+    public override Vector3 UpdateBehaviour(SteeringAgent steeringAgent) //TODO: make followers faster the farther away they are from the leader
     {
         //Leader following behavior causes one or more character to follow another moving character designated as the leader.Generally the followers want to stay near the leader, without
         //crowding the leader, and taking care to stay out of the leader’s way(in case they happen to find them selves in front of the leader). In addition, if there is more than one follower, they

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class SteeringAgent : MonoBehaviour
@@ -28,6 +29,26 @@ public class SteeringAgent : MonoBehaviour
 	/// </summary>
 	private List<SteeringBehaviour> steeringBehaviours = new List<SteeringBehaviour>();
 
+	private float[] weights;
+	[SerializeField]
+	private float alignmentWeight;
+	[SerializeField]
+	private float arrivalWeight;
+	[SerializeField]
+	private float cohesionWeight;
+	[SerializeField]
+	private float evadeWeight;
+	[SerializeField]
+	private float fleeWeight;
+	[SerializeField]
+	private float leaderFollowingWeight;
+	[SerializeField]
+	private float seekWeight;
+	[SerializeField]
+	private float separationWeight;
+	[SerializeField]
+	private float wanderWeight;
+
 	/// <summary>
 	/// Called once per frame
 	/// </summary>
@@ -52,14 +73,68 @@ public class SteeringAgent : MonoBehaviour
 	protected virtual void CooperativeArbitration()
 	{
 		Vector3 steeringVelocity = Vector3.zero;
-		
+
+		weights = new float[9];
+		weights[0] = alignmentWeight;
+		weights[1] = arrivalWeight;
+		weights[2] = cohesionWeight;
+		weights[3] = evadeWeight;
+		weights[4] = fleeWeight;
+		weights[5] = leaderFollowingWeight;
+		weights[6] = seekWeight;
+		weights[7] = separationWeight;
+		weights[8] = wanderWeight;
+		Array.Sort(weights);
+		Array.Reverse(weights);
+
 		GetComponents<SteeringBehaviour>(steeringBehaviours);
-		foreach (SteeringBehaviour currentBehaviour in steeringBehaviours)
-		{
+		foreach (SteeringBehaviour currentBehaviour in steeringBehaviours) //TODO: PRIORITIZE BASED ON WEIGHT
+		{ //TODO: TRUNCATE
+			//if (steeringVelocity < MaxSteering)
+            //{ }
 			if(currentBehaviour.enabled)
 			{
-				//TODO: add weighting here
-				steeringVelocity += currentBehaviour.UpdateBehaviour(this);
+				//TODO: there must be a better way for this
+				if (currentBehaviour.ToString().Contains("Alignment"))
+				{
+					steeringVelocity += currentBehaviour.UpdateBehaviour(this) * alignmentWeight;
+				}
+				else if (currentBehaviour.ToString().Contains("Arrival"))
+				{
+					steeringVelocity += currentBehaviour.UpdateBehaviour(this) * arrivalWeight;
+				}
+				else if (currentBehaviour.ToString().Contains("Cohesion"))
+				{
+					steeringVelocity += currentBehaviour.UpdateBehaviour(this) * cohesionWeight;
+				}
+				else if (currentBehaviour.ToString().Contains("Evade"))
+				{
+					steeringVelocity += currentBehaviour.UpdateBehaviour(this) * evadeWeight;
+				}
+				else if (currentBehaviour.ToString().Contains("Flee"))
+				{
+					steeringVelocity += currentBehaviour.UpdateBehaviour(this) * fleeWeight;
+				}
+				else if (currentBehaviour.ToString().Contains("LeaderFollowing"))
+				{
+					steeringVelocity += currentBehaviour.UpdateBehaviour(this) * leaderFollowingWeight;
+				}
+				else if (currentBehaviour.ToString().Contains("Seek"))
+				{
+					steeringVelocity += currentBehaviour.UpdateBehaviour(this) * seekWeight;
+				}
+				else if (currentBehaviour.ToString().Contains("Separation"))
+				{
+					steeringVelocity += currentBehaviour.UpdateBehaviour(this) * separationWeight;
+				}
+				else if (currentBehaviour.ToString().Contains("Wander"))
+				{
+					steeringVelocity += currentBehaviour.UpdateBehaviour(this) * wanderWeight;
+				}
+				else
+                {
+					Debug.Log("steering behaviour not found");
+                }
 
 				// Show debug lines in scene view
 				if (currentBehaviour.ShowDebugLines)
