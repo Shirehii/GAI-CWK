@@ -33,7 +33,7 @@ public class Separation : SteeringBehaviour
         //These repulsive forces for each nearby character are summed together to produce the overall steering force.
         for (int i = 0; i < otherAgents.Count; i++)
         {
-            repulsiveForce += Vector3.Normalize(transform.position - otherAgents[i].transform.position);
+            repulsiveForce += transform.position - otherAgents[i].transform.position;
         }
         repulsiveForce /= otherAgents.Count; //TODO: determine if this is needed
         repulsiveForce = Vector3.Normalize(repulsiveForce) * steeringAgent.MaxSpeed;

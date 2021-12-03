@@ -1,8 +1,8 @@
 Graphics/Arrow - added by hamid homatash
-Scripts/Arrival - added by hamid homatash, edited to better fit project purposes by me
+Scripts/Arrival - added by hamid homatash
 Scripts/Flee - added by hamid homatash
 Scripts/Helper - added by hamid homatash
 Scripts/Seek - added by hamid homatash
-Scripts/SteeringAgent - added by hamid homatash
+Scripts/SteeringAgent - added by hamid homatash, edited to better fit project purposes by me
 Scripts/SteeringBehaviour - added by hamid homatash
 Scripts/Wander - added by hamid homatash

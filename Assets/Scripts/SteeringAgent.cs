@@ -150,7 +150,7 @@ public class SteeringAgent : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Updates the position of the GAmeObject via Teleportation. In Craig Reynolds architecture this would the Locomotion layer
+	/// Updates the position of the GameObject via Teleportation. In Craig Reynolds architecture this would be the Locomotion layer
 	/// </summary>
 	protected virtual void UpdatePosition()
 	{
