@@ -35,7 +35,7 @@ public class LeaderFollowing : SteeringBehaviour
         // Get the desired unit velocity for seek - we'll apply the maxSpeed later depending on where the agent is
         desiredVelocity = Vector3.Normalize(targetPosition - transform.position);
 
-        // Check to see if agent is in the circle radius and is so decreasespeed in a linear way, otherwise just
+        // Check to see if agent is in the circle radius and if so decrease speed in a linear way, otherwise just
         // do the last step of seek which is apply max speed
         float distance = (targetPosition - transform.position).magnitude;
         if (distance < arrivalRadius)

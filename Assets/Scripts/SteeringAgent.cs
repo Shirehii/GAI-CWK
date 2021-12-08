@@ -89,58 +89,84 @@ public class SteeringAgent : MonoBehaviour
 
 		GetComponents<SteeringBehaviour>(steeringBehaviours);
 		foreach (SteeringBehaviour currentBehaviour in steeringBehaviours) //TODO: PRIORITIZE BASED ON WEIGHT
-		{ //TODO: TRUNCATE
-			//if (steeringVelocity < MaxSteering)
-            //{ }
-			if(currentBehaviour.enabled)
+		{ 
+			while (steeringVelocity.x < MaxSteering && steeringVelocity.y < MaxSteering && steeringVelocity.z < MaxSteering && steeringVelocity.x > -MaxSteering && steeringVelocity.y > -MaxSteering && steeringVelocity.z > -MaxSteering) //for truncating
 			{
-				//TODO: there must be a better way for this
-				if (currentBehaviour.ToString().Contains("Alignment"))
+				if (currentBehaviour.enabled)
 				{
-					steeringVelocity += currentBehaviour.UpdateBehaviour(this) * alignmentWeight;
-				}
-				else if (currentBehaviour.ToString().Contains("Arrival"))
-				{
-					steeringVelocity += currentBehaviour.UpdateBehaviour(this) * arrivalWeight;
-				}
-				else if (currentBehaviour.ToString().Contains("Cohesion"))
-				{
-					steeringVelocity += currentBehaviour.UpdateBehaviour(this) * cohesionWeight;
-				}
-				else if (currentBehaviour.ToString().Contains("Evade"))
-				{
-					steeringVelocity += currentBehaviour.UpdateBehaviour(this) * evadeWeight;
-				}
-				else if (currentBehaviour.ToString().Contains("Flee"))
-				{
-					steeringVelocity += currentBehaviour.UpdateBehaviour(this) * fleeWeight;
-				}
-				else if (currentBehaviour.ToString().Contains("LeaderFollowing"))
-				{
-					steeringVelocity += currentBehaviour.UpdateBehaviour(this) * leaderFollowingWeight;
-				}
-				else if (currentBehaviour.ToString().Contains("Seek"))
-				{
-					steeringVelocity += currentBehaviour.UpdateBehaviour(this) * seekWeight;
-				}
-				else if (currentBehaviour.ToString().Contains("Separation"))
-				{
-					steeringVelocity += currentBehaviour.UpdateBehaviour(this) * separationWeight;
-				}
-				else if (currentBehaviour.ToString().Contains("Wander"))
-				{
-					steeringVelocity += currentBehaviour.UpdateBehaviour(this) * wanderWeight;
-				}
-				else
-                {
-					Debug.Log("steering behaviour not found");
-                }
+					//TODO: there must be a better way for this
+					if (currentBehaviour.ToString().Contains("Alignment")) //for applying weights + summing
+					{
+						steeringVelocity += currentBehaviour.UpdateBehaviour(this) * alignmentWeight;
+					}
+					else if (currentBehaviour.ToString().Contains("Arrival"))
+					{
+						steeringVelocity += currentBehaviour.UpdateBehaviour(this) * arrivalWeight;
+					}
+					else if (currentBehaviour.ToString().Contains("Cohesion"))
+					{
+						steeringVelocity += currentBehaviour.UpdateBehaviour(this) * cohesionWeight;
+					}
+					else if (currentBehaviour.ToString().Contains("Evade"))
+					{
+						steeringVelocity += currentBehaviour.UpdateBehaviour(this) * evadeWeight;
+					}
+					else if (currentBehaviour.ToString().Contains("Flee"))
+					{
+						steeringVelocity += currentBehaviour.UpdateBehaviour(this) * fleeWeight;
+					}
+					else if (currentBehaviour.ToString().Contains("LeaderFollowing"))
+					{
+						steeringVelocity += currentBehaviour.UpdateBehaviour(this) * leaderFollowingWeight;
+					}
+					else if (currentBehaviour.ToString().Contains("Seek"))
+					{
+						steeringVelocity += currentBehaviour.UpdateBehaviour(this) * seekWeight;
+					}
+					else if (currentBehaviour.ToString().Contains("Separation"))
+					{
+						steeringVelocity += currentBehaviour.UpdateBehaviour(this) * separationWeight;
+					}
+					else if (currentBehaviour.ToString().Contains("Wander"))
+					{
+						steeringVelocity += currentBehaviour.UpdateBehaviour(this) * wanderWeight;
+					}
+					else
+					{
+						Debug.Log("steering behaviour not found");
+					}
 
-				// Show debug lines in scene view
-				if (currentBehaviour.ShowDebugLines)
-				{
-					currentBehaviour.DebugDraw(this);
+                    if (steeringVelocity.x >= MaxSteering || steeringVelocity.x <= -MaxSteering)
+                    {
+						if (steeringVelocity.x > MaxSteering)
+							steeringVelocity.x = MaxSteering;
+						else if (steeringVelocity.x < -MaxSteering)
+							steeringVelocity.x = -MaxSteering;
+                    }
+					if (steeringVelocity.y >= MaxSteering || steeringVelocity.y <= -MaxSteering)
+					{
+						if (steeringVelocity.y > MaxSteering)
+							steeringVelocity.y = MaxSteering;
+						else if (steeringVelocity.y < -MaxSteering)
+							steeringVelocity.y = -MaxSteering;
+					}
+					if (steeringVelocity.z >= MaxSteering || steeringVelocity.z <= -MaxSteering) //TODO: z axis probs not needed in general since this is 2D
+					{
+						if (steeringVelocity.z > MaxSteering)
+							steeringVelocity.z = MaxSteering;
+						else if (steeringVelocity.z < -MaxSteering)
+							steeringVelocity.z = -MaxSteering;
+					}
+					//print("X: " + steeringVelocity.x);
+					//print("Y: " + steeringVelocity.y);
+
+					// Show debug lines in scene view
+					if (currentBehaviour.ShowDebugLines)
+					{
+						currentBehaviour.DebugDraw(this);
+					}
 				}
+				break;
 			}
 		}
 
@@ -192,6 +218,16 @@ public class SteeringAgent : MonoBehaviour
 		if (CurrentVelocity.sqrMagnitude > 0.0f)
 		{
 			transform.up = Vector3.Normalize(new Vector3(CurrentVelocity.x, CurrentVelocity.y, 0.0f));
+
+			//Vector3 a = new Vector3(CurrentVelocity.x, CurrentVelocity.y, 0.0f);
+
+			//float singleStep = 8.0f * Time.deltaTime;
+			//Vector3 lookDirection = Vector3.RotateTowards(transform.forward, a, singleStep, 0.0f);
+			//transform.rotation = Quaternion.LookRotation(lookDirection);
+
+			//Quaternion temp = transform.rotation;
+			//temp.y = 0.0f;
+			//transform.rotation = temp;
 		}
 	}
 }
