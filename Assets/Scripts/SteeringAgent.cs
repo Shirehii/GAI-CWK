@@ -29,7 +29,6 @@ public class SteeringAgent : MonoBehaviour
 	/// </summary>
 	private List<SteeringBehaviour> steeringBehaviours = new List<SteeringBehaviour>();
 
-	private float[] weights;
 	[SerializeField]
 	private float alignmentWeight;
 	[SerializeField]
@@ -74,27 +73,13 @@ public class SteeringAgent : MonoBehaviour
 	{
 		Vector3 steeringVelocity = Vector3.zero;
 
-		weights = new float[9];
-		weights[0] = alignmentWeight;
-		weights[1] = arrivalWeight;
-		weights[2] = cohesionWeight;
-		weights[3] = evadeWeight;
-		weights[4] = fleeWeight;
-		weights[5] = leaderFollowingWeight;
-		weights[6] = seekWeight;
-		weights[7] = separationWeight;
-		weights[8] = wanderWeight;
-		Array.Sort(weights);
-		Array.Reverse(weights);
-
 		GetComponents<SteeringBehaviour>(steeringBehaviours);
-		foreach (SteeringBehaviour currentBehaviour in steeringBehaviours) //TODO: PRIORITIZE BASED ON WEIGHT
-		{ 
+		foreach (SteeringBehaviour currentBehaviour in steeringBehaviours) //TODO: prioritization based on weight
+		{
 			while (steeringVelocity.x < MaxSteering && steeringVelocity.y < MaxSteering && steeringVelocity.z < MaxSteering && steeringVelocity.x > -MaxSteering && steeringVelocity.y > -MaxSteering && steeringVelocity.z > -MaxSteering) //for truncating
 			{
 				if (currentBehaviour.enabled)
 				{
-					//TODO: there must be a better way for this
 					if (currentBehaviour.ToString().Contains("Alignment")) //for applying weights + summing
 					{
 						steeringVelocity += currentBehaviour.UpdateBehaviour(this) * alignmentWeight;
@@ -136,6 +121,7 @@ public class SteeringAgent : MonoBehaviour
 						Debug.Log("steering behaviour not found");
 					}
 
+					//truncate
                     if (steeringVelocity.x >= MaxSteering || steeringVelocity.x <= -MaxSteering)
                     {
 						if (steeringVelocity.x > MaxSteering)
@@ -150,15 +136,6 @@ public class SteeringAgent : MonoBehaviour
 						else if (steeringVelocity.y < -MaxSteering)
 							steeringVelocity.y = -MaxSteering;
 					}
-					if (steeringVelocity.z >= MaxSteering || steeringVelocity.z <= -MaxSteering) //TODO: z axis probs not needed in general since this is 2D
-					{
-						if (steeringVelocity.z > MaxSteering)
-							steeringVelocity.z = MaxSteering;
-						else if (steeringVelocity.z < -MaxSteering)
-							steeringVelocity.z = -MaxSteering;
-					}
-					//print("X: " + steeringVelocity.x);
-					//print("Y: " + steeringVelocity.y);
 
 					// Show debug lines in scene view
 					if (currentBehaviour.ShowDebugLines)
@@ -217,17 +194,7 @@ public class SteeringAgent : MonoBehaviour
 		// Don't set the direction if no direction
 		if (CurrentVelocity.sqrMagnitude > 0.0f)
 		{
-			transform.up = Vector3.Normalize(new Vector3(CurrentVelocity.x, CurrentVelocity.y, 0.0f));
-
-			//Vector3 a = new Vector3(CurrentVelocity.x, CurrentVelocity.y, 0.0f);
-
-			//float singleStep = 8.0f * Time.deltaTime;
-			//Vector3 lookDirection = Vector3.RotateTowards(transform.forward, a, singleStep, 0.0f);
-			//transform.rotation = Quaternion.LookRotation(lookDirection);
-
-			//Quaternion temp = transform.rotation;
-			//temp.y = 0.0f;
-			//transform.rotation = temp;
+			transform.up = Vector3.Lerp(transform.up, Vector3.Normalize(new Vector3(CurrentVelocity.x, CurrentVelocity.y, 0.0f)), Time.deltaTime * 20f);
 		}
 	}
 }

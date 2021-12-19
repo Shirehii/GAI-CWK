@@ -11,9 +11,6 @@ public class Cohesion : SteeringBehaviour
 
     public override Vector3 UpdateBehaviour(SteeringAgent steeringAgent)
     {
-        // Cohesion steering behavior gives an character the ability to cohere with(approach and form a
-        //group with) other nearby characters.See Figure 15. Steering for cohesion can be computed by
-        //finding all characters in the local neighborhood(as described above for separation),
         Vector3 attractiveForce;
 
         Collider[] hitColliders = Physics.OverlapSphere(transform.position, neighborhoodDistance);
@@ -26,7 +23,7 @@ public class Cohesion : SteeringBehaviour
             Vector3 otherAgentDirection = hitColliders[i].transform.position - transform.position;
             float angle = Vector3.Angle(otherAgentDirection, transform.up);
 
-            if (hitColliders[i].tag == "Follower" && angle <= neighborhoodAngle && -angle >= -neighborhoodAngle) //TODO: determine if -angle >= -neighborhoodAngle is needed
+            if (hitColliders[i].tag == "Follower" && angle <= neighborhoodAngle && -angle >= -neighborhoodAngle)
                 otherAgents.Add(hitColliders[i].gameObject);
         }
 
@@ -38,12 +35,8 @@ public class Cohesion : SteeringBehaviour
         }
         averagePosition /= otherAgents.Count;
 
-        //The steering force can applied in the direction of that “average position” (subtracting our character position
-        //from the average position, as in the original boids model), or it can be used as the target for
-        //seek steering behavior.
         attractiveForce = Vector3.Normalize(averagePosition - transform.position) * steeringAgent.MaxSpeed;
 
-        //TODO: return steeringVelocity instead?
         return attractiveForce;
     }
 }

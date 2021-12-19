@@ -11,16 +11,18 @@ public class Evade : SteeringBehaviour
     public override Vector3 UpdateBehaviour(SteeringAgent steeringAgent)
     {
         if (leader == null)
-            leader = GameObject.FindGameObjectWithTag("Leader"); //TODO: not needed?
+            leader = GameObject.FindGameObjectWithTag("Leader");
 
-        if (targetPosition != Vector3.zero)
+        if (targetPosition != Vector3.zero) //if there is a target position...
         {
+            //...flee
             desiredVelocity = Vector3.Normalize(transform.position - targetPosition) * steeringAgent.MaxSpeed;
 
-            steeringVelocity = desiredVelocity - steeringAgent.CurrentVelocity;
+            desiredVelocity = desiredVelocity - steeringAgent.CurrentVelocity;
         }
         else 
         {
+            //else, return a zero vector
             desiredVelocity = Vector3.zero;
         }
 
@@ -32,7 +34,6 @@ public class Evade : SteeringBehaviour
         if (col.gameObject.CompareTag("Leader"))
         {
             targetPosition = col.gameObject.GetComponent<BoxCollider>().transform.position;
-            //print(targetPosition);
         }
     }
     void OnCollisionExit(Collision col)
